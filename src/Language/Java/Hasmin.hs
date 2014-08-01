@@ -36,18 +36,18 @@ renderMethodSig (Method attrs name ret args d l c) = renderSig name ret args
 
 renderSig name ret args = name ++ "(" ++ concatMap show args ++ ")" ++ show ret
 
-renderClass :: [Method] -> String
-renderClass ms = "\
-\.class  public Instant\n\
-\.super  java/lang/Object\n\
-\\n\
-\;\n\
+renderClass :: String -> [Method] -> String
+renderClass name ms = unlines [intro,super,init,methods] where
+  intro = "class public " ++ name 
+  super = ".super  java/lang/Object"
+  init = ";\n\
 \; standard initializer\n\
 \.method public <init>()V\n\
 \   aload_0\n\
 \   invokespecial java/lang/Object/<init>()V\n\
 \   return\n\
-\.end method\n" ++ unlines (map renderMethod ms)
+\.end method\n" 
+  methods = unlines (map renderMethod ms)
 
 
 data JInstr = JIconst Integer |
